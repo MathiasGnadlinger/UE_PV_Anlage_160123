@@ -26,14 +26,27 @@
           <tr v-for="(item, index) in items" :key="item.zaehlpunkt">
             <td>{{ item.name }}</td>
             <td>{{ item.plz }}</td>
-            <td>
-              <input
-                type="text"
-                v-model="item.zaehlpunkt"
-                @blur="updateZaehlpunkt(item)"
-              />
-            </td>
-            <td>{{ item.kwPeak }}</td>
+
+          <td>
+            <input
+              ref="zaehlpunktInput"
+              type="text"
+              v-model="item.zaehlpunkt"
+              @blur="updatezaehlpunkt(item)"
+            />
+            <button @click="editzaehlpunkt(item)">Edit</button>
+          </td>
+
+           <td>
+            <input
+              ref="kwPeakInput"
+              type="text"
+              v-model="item.kwPeak"
+              @blur="updateKwPeak(item)"
+            />
+            <button @click="editKwPeak(item)">Edit</button>
+          </td>
+
             <td>
               <td>
                 <input 
@@ -64,11 +77,30 @@ export default {
   props: {
     items: { type: Array, required: true },
   },
-  methods: {
-    updateZaehlpunkt(item) {
-      console.log(item.zaehlpunkt);
-      //You can use the value of item.zaehlpunkt here to update the data in your server or in local storage
+methods: {
+  editzaehlpunkt(item) {
+      // set the kwPeak value to an empty string to allow editing
+      item.zaehlpunkt = '';
     },
+    updatezaehlpunkt(item) {
+      console.log(item.zaehlpunkt);
+      // You can use the value of item.kwPeak here to update the data in your server or in local storage
+    },
+  editKwPeak(item) {
+      // set the kwPeak value to an empty string to allow editing
+      item.kwPeak = '';
+    },
+    updateKwPeak(item) {
+    var decimal = /^[-+]?[0-9]+\.[0-9]+$/;
+    if(!decimal.test(item.kwPeak))
+    {
+        alert("kwPeak should be a decimal number")
+        item.kwPeak = '';
+        return
+    }
+    console.log(item.kwPeak);
+    // You can use the value of item.kwPeak here to update the data in your server or in local storage
+},
     updateBewilligt(index) {
       this.$emit('update-application', index);
     },
@@ -86,13 +118,13 @@ table {
 
 th,
 td {
-  border: 1px solid pink;
+  border: 1px solid black;
   padding: 8px;
   text-align: left;
 }
 
 th {
-  background-color: pink;
+  background-color: lightgrey;
   font-weight: bold;
 }
 
